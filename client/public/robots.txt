@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /accountant
+Disallow: /sales
+Disallow: /billing
+Disallow: /accounting
+Disallow: /accounts
+Disallow: /operations
+Disallow: /tax
+Disallow: /documents
+Disallow: /audit
+Disallow: /settings
+Disallow: /print/
+Disallow: /customer-portal/
+Disallow: /reset-password
+Disallow: /change-password
+Disallow: /forgot-password
+
+Sitemap: https://qayd.tech/sitemap.xml

@@ -19,7 +19,7 @@ export default function LocalLogin() {
   const login = trpc.auth.localLogin.useMutation({
     onSuccess: async (result) => {
       await utils.auth.me.invalidate();
-      setLocation(result.mustChangePassword ? "/change-password" : "/");
+      setLocation(result.mustChangePassword ? "/change-password" : "/app");
     },
     onError: (cause) => setError(cause.message || "تعذر تسجيل الدخول حالياً."),
   });
