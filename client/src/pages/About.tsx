@@ -19,7 +19,7 @@ export default function About() {
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#0b3d3a] text-white"><Landmark className="h-5 w-5" /></span>
             <span><strong className="block text-lg tracking-tight">{PRODUCT_BRAND.bilingual}</strong><span className="block text-[10px] uppercase tracking-[0.14em] text-[#5d776c]">AI Financial Operating System</span></span>
           </Link>
-          <div className="flex items-center gap-2"><Link href="/login" className="rounded-xl border border-[#cbdad1] px-4 py-2 text-sm font-semibold text-[#0b3d3a] transition-colors hover:bg-[#eef5f0]">تسجيل الدخول</Link><Link href="/" className="hidden items-center gap-1 rounded-xl bg-[#0b3d3a] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#082f2d] sm:flex">العودة للمنصة <ArrowRight className="h-4 w-4" /></Link></div>
+          <div className="flex items-center gap-2"><Link href="/login" className="rounded-xl border border-[#cbdad1] px-4 py-2 text-sm font-semibold text-[#0b3d3a] transition-colors hover:bg-[#eef5f0]">تسجيل الدخول</Link><Link href="/app" className="hidden items-center gap-1 rounded-xl bg-[#0b3d3a] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#082f2d] sm:flex">العودة للمنصة <ArrowRight className="h-4 w-4" /></Link></div>
         </div>
       </header>
       <main>

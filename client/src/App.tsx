@@ -26,7 +26,7 @@ function Router() {
       <Route path={"/forgot-password"} component={PasswordReset} />
       <Route path={"/reset-password"} component={PasswordReset} />
       <Route path={"/change-password"} component={ChangePassword} />
-      <Route path={"/"}>{() => <Workspace module="dashboard" />}</Route>
+      <Route path={"/app"}>{() => <Workspace module="dashboard" />}</Route>
       <Route path={"/accountant"}>{() => <Workspace module="accountant" />}</Route>
       <Route path={"/sales"}>{() => <Workspace module="sales" />}</Route>
       <Route path={"/billing"}>{() => <Workspace module="billing" />}</Route>
