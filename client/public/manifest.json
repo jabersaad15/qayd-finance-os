@@ -1,0 +1,23 @@
+{
+  "name": "قيد | QAYD",
+  "short_name": "قيد",
+  "description": "نظام التشغيل المالي الذكي للشركات — كل قيد يقود إلى قرار.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f7f4",
+  "theme_color": "#0b3d3a",
+  "icons": [
+    {
+      "src": "/manus-storage/consedra-logo-square_12f98105.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/manus-storage/consedra-logo-square_12f98105.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

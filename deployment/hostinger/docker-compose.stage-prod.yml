@@ -1,0 +1,13 @@
+services:
+  app:
+    ports:
+      - "3011:3000"
+    environment:
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@hostinger-database-1:3306/${MYSQL_DATABASE}
+    networks:
+      - hostinger_consedra_internal
+    labels:
+      traefik.enable: "false"
+networks:
+  hostinger_consedra_internal:
+    external: true

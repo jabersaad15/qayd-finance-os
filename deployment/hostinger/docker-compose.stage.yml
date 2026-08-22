@@ -1,0 +1,10 @@
+services:
+  app:
+    labels:
+      traefik.enable: "false"
+    networks:
+      - consedra_internal
+
+networks:
+  consedra_internal:
+    external: false

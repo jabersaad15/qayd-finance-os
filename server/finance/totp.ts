@@ -1,0 +1,12 @@
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes } from "node:crypto";
+import { PRODUCT_BRAND } from "../../shared/productBrand";
+
+const base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+function base32Decode(value: string) { let bits = ""; for (const char of value.replace(/=+$/g, "").toUpperCase()) { const index = base32Alphabet.indexOf(char); if (index < 0) throw new Error("Invalid base32 secret"); bits += index.toString(2).padStart(5, "0"); } const bytes: number[] = []; for (let index = 0; index + 8 <= bits.length; index += 8) bytes.push(Number.parseInt(bits.slice(index, index + 8), 2)); return Buffer.from(bytes); }
+export function createTotpSecret() { let result = ""; for (const byte of randomBytes(20)) result += base32Alphabet[byte % base32Alphabet.length]; return result; }
+export function totpCode(secret: string, timestamp = Date.now()) { const counter = Math.floor(timestamp / 30000); const buffer = Buffer.alloc(8); buffer.writeBigUInt64BE(BigInt(counter)); const digest = createHmac("sha1", base32Decode(secret)).update(buffer).digest(); const offset = digest[digest.length - 1] & 15; const number = (digest.readUInt32BE(offset) & 0x7fffffff) % 1000000; return String(number).padStart(6, "0"); }
+export function verifyTotpCode(secret: string, code: string, timestamp = Date.now()) { return [-1, 0, 1].some((offset) => totpCode(secret, timestamp + offset * 30000) === code); }
+function key() { return createHash("sha256").update(process.env.JWT_SECRET || "con sedra-mfa-development-key").digest(); }
+export function encryptTotpSecret(secret: string) { const iv = randomBytes(12); const cipher = createCipheriv("aes-256-gcm", key(), iv); const encrypted = Buffer.concat([cipher.update(secret, "utf8"), cipher.final()]); return `${iv.toString("base64url")}.${cipher.getAuthTag().toString("base64url")}.${encrypted.toString("base64url")}`; }
+export function decryptTotpSecret(value: string) { const [iv, tag, payload] = value.split("."); const decipher = createDecipheriv("aes-256-gcm", key(), Buffer.from(iv, "base64url")); decipher.setAuthTag(Buffer.from(tag, "base64url")); return Buffer.concat([decipher.update(Buffer.from(payload, "base64url")), decipher.final()]).toString("utf8"); }
+export function totpUri(secret: string, account: string, issuer = PRODUCT_BRAND.bilingual) { return `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(account)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`; }

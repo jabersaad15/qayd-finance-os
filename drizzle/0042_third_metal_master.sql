@@ -1,0 +1,1 @@
+ALTER TABLE `onboardingImportBatches` ADD `payload` text;

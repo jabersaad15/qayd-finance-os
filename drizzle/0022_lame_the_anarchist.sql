@@ -1,0 +1,1 @@
+ALTER TABLE `customers` ADD `accountTier` enum('standard','large','strategic') DEFAULT 'standard' NOT NULL;

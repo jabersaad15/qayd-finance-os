@@ -1,0 +1,70 @@
+services:
+  database:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${MYSQL_DATABASE}
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - qayd_mysql:/var/lib/mysql
+    networks:
+      - qayd_internal
+
+  app:
+    build:
+      context: ../..
+      dockerfile: deployment/hostinger/Dockerfile
+      args:
+        VITE_AUTH_MODE: local
+    restart: unless-stopped
+    depends_on:
+      - database
+    ports:
+      - "${HOST_PORT:-3010}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      AUTH_MODE: local
+      VITE_AUTH_MODE: local
+      VITE_APP_ID: ${VITE_APP_ID}
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@database:3306/${MYSQL_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+      LOCAL_ADMIN_EMAIL: ${LOCAL_ADMIN_EMAIL}
+      LOCAL_ADMIN_PASSWORD: ${LOCAL_ADMIN_PASSWORD}
+      STORAGE_MODE: local
+      LOCAL_STORAGE_PATH: /data/qayd-storage
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+    volumes:
+      - qayd_storage:/data/qayd-storage
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: easypanel
+      traefik.http.services.qayd.loadbalancer.server.port: "3000"
+      traefik.http.routers.qayd-http.rule: "Host(`${PUBLIC_DOMAIN}`) || Host(`www.${PUBLIC_DOMAIN}`)"
+      traefik.http.routers.qayd-http.entrypoints: http
+      traefik.http.routers.qayd-http.middlewares: qayd-https-redirect
+      traefik.http.middlewares.qayd-https-redirect.redirectscheme.scheme: https
+      traefik.http.routers.qayd.rule: "Host(`${PUBLIC_DOMAIN}`) || Host(`www.${PUBLIC_DOMAIN}`)"
+      traefik.http.routers.qayd.entrypoints: https
+      traefik.http.routers.qayd.tls: "true"
+      traefik.http.routers.qayd.tls.certresolver: letsencrypt
+    networks:
+      - qayd_internal
+      - easypanel
+
+volumes:
+  qayd_mysql:
+  qayd_storage:
+
+networks:
+  qayd_internal:
+    driver: bridge
+  easypanel:
+    external: true

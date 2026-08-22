@@ -1,0 +1,1 @@
+ALTER TABLE `appRoles` ADD COLUMN IF NOT EXISTS `isActive` boolean NOT NULL DEFAULT true;

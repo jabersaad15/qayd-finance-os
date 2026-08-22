@@ -1,0 +1,1 @@
+ALTER TABLE `approvalCases` MODIFY COLUMN `status` enum('pending','approved','rejected','returned','information_required','escalated','completed','cancelled') NOT NULL DEFAULT 'pending';
